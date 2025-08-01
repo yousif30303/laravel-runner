@@ -1,4 +1,4 @@
-name: Deploy Laravel App on Push to Main
+name: Deploy Laravel App
 
 on:
   push:
@@ -7,14 +7,13 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted  # Your Ubuntu runner
+    runs-on: self-hosted
 
     steps:
-      - name: Pull latest code
-        run: |
-          cd /var/www/html
-          git reset --hard
-          git pull origin main
+      - name: Checkout code into /var/www/html
+        uses: actions/checkout@v4
+        with:
+          path: /var/www/html
 
       - name: Laravel deployment
         run: |
