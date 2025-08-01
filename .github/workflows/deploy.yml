@@ -1,0 +1,26 @@
+name: Deploy Laravel App on Push to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted  # Your Ubuntu runner
+
+    steps:
+      - name: Pull latest code
+        run: |
+          cd /var/www/html
+          git reset --hard
+          git pull origin main
+
+      - name: Laravel deployment
+        run: |
+          cd /var/www/html
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+          php artisan migrate --force
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
