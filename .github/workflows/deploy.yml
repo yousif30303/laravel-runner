@@ -1,4 +1,4 @@
-name: Deploy Laravel App
+name: Deploy Laravel App to /var/www/html
 
 on:
   push:
@@ -10,12 +10,14 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Checkout code into /var/www/html
+      - name: Checkout repo (into default workspace)
         uses: actions/checkout@v4
-        with:
-          path: /var/www/html
 
-      - name: Laravel deployment
+      - name: Deploy to /var/www/html
+        run: |
+          sudo rsync -a --delete $GITHUB_WORKSPACE/ /var/www/html/
+
+      - name: Laravel deploy steps
         run: |
           cd /var/www/html
           composer install --no-interaction --prefer-dist --optimize-autoloader
